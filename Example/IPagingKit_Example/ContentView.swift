@@ -10,44 +10,33 @@ import UIKit
 
 struct ContentView: View {
 
-    private var vm = ContentViewModel()
-    private let gridSpacing: CGFloat = 5
-    private let gridItemPadding: CGFloat = 5
+    @StateObject var viewModel = ContentViewModel()
     
-    
-    private var gridColumn: [GridItem] {
-        [GridItem(.adaptive(minimum: UIScreen.main.bounds.width / 3 - gridItemPadding * 2))]
-    }
-        
-    var body: some View {
-        ScrollView {
-            LazyVGrid(
-                columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())],
-                spacing: gridSpacing,
-                content: {
-                    ForEach(vm.data, id: \.self) { item in
-                        Text(String(item))
-                            .frame(width: UIScreen.main.bounds.width / 3 - gridSpacing, height: 150)
-                            .background(vm.getColor(for: item))
-                            .cornerRadius(10)
-                            .foregroundColor(.white)
-                            .font(.title)
-                            .onAppear {
-                                vm.loadMoreIfNeeded(currentItem: item)
-                            }
-                    }
-                })
-            .padding(.horizontal, gridItemPadding)
-            if vm.isLoadingMore {
-                ProgressView("Loading more...")
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 50)
-                    .padding(.vertical)
+    var body: some View{
+        List {
+            ForEach(viewModel.albums) { album in
+                Text(album.collectionName)
             }
-        }.onAppear(perform: vm.setupColors)
+            
+            switch viewModel.loadState {
+            case .loadStart:
+                    Color.clear
+                        .onAppear {
+                            viewModel.loadMore()
+                        }
+            case .loading:
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .frame(maxWidth: .infinity)
+                case .e:
+                    EmptyView()
+                case .error(let message):
+                    Text(message)
+                        .foregroundColor(.pink)
+            }
+        }
+        .listStyle(.plain)
     }
-    
-
 }
 
 #Preview {

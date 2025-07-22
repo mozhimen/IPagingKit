@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F7B0B3862E2E4DD3000E003E /* IPagingKit.Basic in Frameworks */ = {isa = PBXBuildFile; productRef = F7B0B3852E2E4DD3000E003E /* IPagingKit.Basic */; };
+		F78AEE4A2E2F7F7200BCEAB2 /* IPagingKit.Pagination in Frameworks */ = {isa = PBXBuildFile; productRef = F78AEE492E2F7F7200BCEAB2 /* IPagingKit.Pagination */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7B0B3862E2E4DD3000E003E /* IPagingKit.Basic in Frameworks */,
+				F78AEE4A2E2F7F7200BCEAB2 /* IPagingKit.Pagination in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,7 +70,7 @@
 			);
 			name = IPagingKit_Example;
 			packageProductDependencies = (
-				F7B0B3852E2E4DD3000E003E /* IPagingKit.Basic */,
+				F78AEE492E2F7F7200BCEAB2 /* IPagingKit.Pagination */,
 			);
 			productName = IPagingKit_Example;
 			productReference = F7B0B3682E2E465D000E003E /* IPagingKit_Example.app */;
@@ -101,7 +101,7 @@
 			mainGroup = F7B0B35F2E2E465D000E003E;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				F7B0B3842E2E4DD3000E003E /* XCLocalSwiftPackageReference "../../IPagingKit" */,
+				F78AEE482E2F7F7100BCEAB2 /* XCLocalSwiftPackageReference "../Pagination" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F7B0B3692E2E465D000E003E /* Products */;
@@ -346,16 +346,16 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		F7B0B3842E2E4DD3000E003E /* XCLocalSwiftPackageReference "../../IPagingKit" */ = {
+		F78AEE482E2F7F7100BCEAB2 /* XCLocalSwiftPackageReference "../Pagination" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../IPagingKit;
+			relativePath = ../Pagination;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F7B0B3852E2E4DD3000E003E /* IPagingKit.Basic */ = {
+		F78AEE492E2F7F7200BCEAB2 /* IPagingKit.Pagination */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = IPagingKit.Basic;
+			productName = IPagingKit.Pagination;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
