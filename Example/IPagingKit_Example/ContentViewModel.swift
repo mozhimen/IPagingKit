@@ -8,6 +8,8 @@
 import SwiftUI
 import Foundation
 import Combine
+import SUtilKit_SwiftUI
+import IPagingKit_Pagination
 
 // MARK: - AlbumResult
 struct AlbumResult: Codable {
@@ -44,25 +46,21 @@ struct Album: Codable, Identifiable {
         case artworkUrl60, artworkUrl100, collectionPrice, collectionExplicitness, trackCount, copyright, country, currency, releaseDate, primaryGenreName
     }
 }
-enum PageState{
-    case Loading
-    case NoLoading
-}
 
-enum LoadState: Comparable {
-    case loadStart
-    case loadEmpty
-    case loading
-    case loadFinished(PageState)
-    case loadError(String)
-        
-    case good
-    case isLoading
-    case loadedAll
-    case error(String)
-}
+//enum LoadState: Comparable {
+//    case loadStart
+//    case loadEmpty
+//    case loading
+//    case loadFinished(PageState)
+//    case loadError(String)
+//        
+//    case good
+//    case isLoading
+//    case loadedAll
+//    case error(String)
+//}
 
-class ContentViewModel:ObservableObject{
+class ContentViewModel:BasePagingKViewModel<Album,Album> {
     
     
     @Published var searchText: String = "rammstein"
@@ -93,6 +91,9 @@ class ContentViewModel:ObservableObject{
     
     //=================================================================>
 
+    override func onLoading(currentPageIndex: Int, pageSize: Int) async throws -> PagingKBaseRes<Album> {
+        
+    }
     func fetchAlbums(_ searchText: String) {
         
         guard !searchText.isEmpty else {

@@ -6,7 +6,7 @@
 //
 
 enum LoadState{
-    case loadStart(isFirst:Bool)
-    case loadFinish
-    case loadEmpty
+    case Start(isFirst:Bool)
+    case Finish
+    case Empty
 }
