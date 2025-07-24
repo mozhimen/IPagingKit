@@ -10,42 +10,8 @@ import Foundation
 import Combine
 import SUtilKit_SwiftUI
 import IPagingKit_Pagination
+import INetKit_Retrofit
 
-// MARK: - AlbumResult
-struct AlbumResult: Codable {
-    let resultCount: Int
-    let results: [Album]
-}
-
-// MARK: - Result
-struct Album: Codable, Identifiable {
-    let wrapperType, collectionType: String
-    let id: Int
-    let artistID: Int
-    let amgArtistID: Int?
-    let artistName, collectionName, collectionCensoredName: String
-    let artistViewURL: String?
-    let collectionViewURL: String
-    let artworkUrl60, artworkUrl100: String
-    let collectionPrice: Double?
-    let collectionExplicitness: String
-    let trackCount: Int
-    let copyright: String?
-    let country, currency: String
-    let releaseDate: String
-    let primaryGenreName: String
-
-    enum CodingKeys: String, CodingKey {
-        case wrapperType, collectionType
-        case artistID = "artistId"
-        case id = "collectionId"
-        case amgArtistID = "amgArtistId"
-        case artistName, collectionName, collectionCensoredName
-        case artistViewURL = "artistViewUrl"
-        case collectionViewURL = "collectionViewUrl"
-        case artworkUrl60, artworkUrl100, collectionPrice, collectionExplicitness, trackCount, copyright, country, currency, releaseDate, primaryGenreName
-    }
-}
 
 //enum LoadState: Comparable {
 //    case loadStart
@@ -56,7 +22,7 @@ struct Album: Codable, Identifiable {
 //        
 //    case good
 //    case isLoading
-//    case loadedAll
+//    case loadedAll∂
 //    case error(String)
 //}
 
@@ -65,21 +31,19 @@ class ContentViewModel:BasePagingKViewModel<Album,Album> {
     
     @Published var searchText: String = "rammstein"
     @Published var albums: [Album] = [Album]()
-    @Published var loadState: LoadState = .loadStart {
-        didSet {
-            print("state changed to: \(loadState)")
-        }
-    }
     
     let limit: Int = 20
     var page: Int = 0
     
-    var subscriptions = Set<AnyCancellable>()
+    private let _api = Apis(retrofit: Retroft.Builder().setStrScheme("https").setStrHost("itunes.apple.com").build())
     
     //=================================================================>
     
     init() {
         $searchText
+            .filter({ str in
+                return !str.isEmpty && loadState != LoadState.Start
+            })
             .dropFirst()
             .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
             .sink { [weak self] term in
@@ -87,18 +51,24 @@ class ContentViewModel:BasePagingKViewModel<Album,Album> {
                 self?.albums = []
                 self?.fetchAlbums(term)
             }.store(in: &subscriptions)
+        super.init(pagingConfig: PagingConfig(pageIndexFirst: 0))
     }
     
     //=================================================================>
 
     override func onLoading(currentPageIndex: Int, pageSize: Int) async throws -> PagingKBaseRes<Album> {
-        
+        let res = try await _api.search(Apis.SearchRequest(searchText: searchText,limit: pagingConfig.pageSize, offset: currentPageIndex*pagingConfig.pageSize))
+        var totalPageCount = currentPageIndex+2
+        var totalItemCount = totalPageCount*pageSize
+        if let count = res?.resultCount,count < pagingConfig.pageSize {
+            totalItemCount = currentPageIndex*pageSize+count
+            totalPageCount = currentPageIndex+1
+        }
+        return PagingKBaseRes(0, nil, PagingKDataRes(currentPageIndex: currentPageIndex, currentPageItems: res?.results, totalPageNum: totalPageCount, totalItemNum: totalItemCount, pageSize: pagingConfig.pageSize))
     }
+    
     func fetchAlbums(_ searchText: String) {
         
-        guard !searchText.isEmpty else {
-            return
-        }
         
         guard loadState == LoadState.loadStart else {
             return

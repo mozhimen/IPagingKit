@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F78AEE4A2E2F7F7200BCEAB2 /* IPagingKit.Pagination in Frameworks */ = {isa = PBXBuildFile; productRef = F78AEE492E2F7F7200BCEAB2 /* IPagingKit.Pagination */; };
+		F78AEED02E31CBEE00BCEAB2 /* INetKit.Retrofit in Frameworks */ = {isa = PBXBuildFile; productRef = F78AEECF2E31CBEE00BCEAB2 /* INetKit.Retrofit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F78AEE4A2E2F7F7200BCEAB2 /* IPagingKit.Pagination in Frameworks */,
+				F78AEED02E31CBEE00BCEAB2 /* INetKit.Retrofit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +73,7 @@
 			name = IPagingKit_Example;
 			packageProductDependencies = (
 				F78AEE492E2F7F7200BCEAB2 /* IPagingKit.Pagination */,
+				F78AEECF2E31CBEE00BCEAB2 /* INetKit.Retrofit */,
 			);
 			productName = IPagingKit_Example;
 			productReference = F7B0B3682E2E465D000E003E /* IPagingKit_Example.app */;
@@ -102,6 +105,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				F78AEE482E2F7F7100BCEAB2 /* XCLocalSwiftPackageReference "../Pagination" */,
+				F78AEECE2E31CBEE00BCEAB2 /* XCLocalSwiftPackageReference "../../INetKit/Retrofit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F7B0B3692E2E465D000E003E /* Products */;
@@ -350,12 +354,20 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../Pagination;
 		};
+		F78AEECE2E31CBEE00BCEAB2 /* XCLocalSwiftPackageReference "../../INetKit/Retrofit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../INetKit/Retrofit;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		F78AEE492E2F7F7200BCEAB2 /* IPagingKit.Pagination */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = IPagingKit.Pagination;
+		};
+		F78AEECF2E31CBEE00BCEAB2 /* INetKit.Retrofit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = INetKit.Retrofit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

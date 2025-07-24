@@ -2,11 +2,17 @@
 //  LoadState.swift
 //  IPagingKit.Pagination
 //
-//  Created by Taiyou on 2025/7/22.
+//  Created by Taiyou on 2025/7/24.
 //
 
-enum LoadState{
-    case Start(isFirst:Bool)
-    case Finish
-    case Empty
+public open class LoadState{
+    let endOfPagingationReached:Bool
+    
+    init(endOfPagingnationReached:Bool) {
+        endOfPagingnationReached = endOfPagingnationReached
+    }
+    
+    //================================================>
+    
+    
 }

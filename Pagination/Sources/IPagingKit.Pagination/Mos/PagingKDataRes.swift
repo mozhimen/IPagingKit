@@ -5,7 +5,7 @@
 //  Created by Taiyou on 2025/7/22.
 //
 
-public struct PagingKDataRes<RES>:CustomStringConvertible {
+public struct PagingKDataRes<RES>: CustomStringConvertible {
     var currentPageIndex = 0
     var currentPageItems: [RES]? = nil
     var totalPageNum = 0
@@ -14,7 +14,7 @@ public struct PagingKDataRes<RES>:CustomStringConvertible {
     
     //========================================================>
     
-    init(
+    public init(
         currentPageIndex: Int,
         currentPageItems: [RES]?,
         totalPageNum: Int ,

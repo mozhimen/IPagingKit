@@ -15,15 +15,23 @@ open class BasePagingKViewModel<RES,DES> : BaseViewModel, PPagingKStateSource {
     
     //==========================================================>
     
-    @Published var pubLoadState:LoadState? = nil
-    open lazy var pager:Pager<Int,DES> = getPager()
+    @Published public var pageState: PageState? = nil
+    open lazy var pager: Pager<Int,DES> = getPager()
     open var pagingConfig :PagingConfig = PagingConfig()
     open var dataSource: (any PPagingKDataSource<RES,DES>)? = nil
+    
+    //==========================================================>
+    
+    public init(pagingConfig: PagingConfig) {
+        self.pagingConfig = pagingConfig
+        super.init()
+    }
     
     //==========================================================>
 
     open func getPager()-> Pager<Int,DES> {
         return Pager(
+            initialKey: pagingConfig.pageIndexFirst,
             pagingConfig: pagingConfig,
             pagingSource: getPagingSourceFactory()
         )
@@ -41,30 +49,31 @@ open class BasePagingKViewModel<RES,DES> : BaseViewModel, PPagingKStateSource {
     
     private var _isLoadStartFirst = true
     
-    public func onLoadStart(currentPageIndex: Int) async throws {
+    open func onLoadStart(currentPageIndex: Int) async throws {
         if currentPageIndex == pagingConfig.pageIndexFirst {
             if _isLoadStartFirst {
                 _isLoadStartFirst = false
                 print("onLoadStart:")
-                pubLoadState = LoadState.Start(isFirst: true)
+                pageState = PageState.StartFirst
             }
+            pageState = PageState.Start
         }
     }
     
     
-    public func onLoading(currentPageIndex: Int, pageSize: Int) async throws -> PagingKBaseRes<RES> {
+    open func onLoading(currentPageIndex: Int, pageSize: Int) async throws -> PagingKBaseRes<RES> {
         fatalError()
     }
     
     
-    public func onLoadFinished(currentPageIndex: Int, isResEmpty: Bool) async throws {
+    open func onLoadFinished(currentPageIndex: Int, isResEmpty: Bool) async throws {
         if currentPageIndex==pagingConfig.pageIndexFirst {
             if isResEmpty {
                 print("onLoadFinish: isEmpty \(isResEmpty)")
-                pubLoadState = LoadState.Empty
+                pageState = PageState.Empty
             }
             else{
-                pubLoadState = LoadState.Finish
+                pageState = PageState.Finish
             }
         }
     }

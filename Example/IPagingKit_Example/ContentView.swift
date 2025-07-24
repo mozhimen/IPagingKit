@@ -9,7 +9,7 @@ import SwiftUI
 import UIKit
 
 struct ContentView: View {
-
+    
     @StateObject var viewModel = ContentViewModel()
     
     var body: some View{
@@ -17,22 +17,19 @@ struct ContentView: View {
             ForEach(viewModel.albums) { album in
                 Text(album.collectionName)
             }
-            
+            Color.clear.onAppear(perform: {
+                viewModel.pager.add()
+            })
             switch viewModel.loadState {
-            case .loadStart:
-                    Color.clear
-                        .onAppear {
-                            viewModel.loadMore()
-                        }
-            case .loading:
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                        .frame(maxWidth: .infinity)
-                case .e:
-                    EmptyView()
-                case .error(let message):
-                    Text(message)
-                        .foregroundColor(.pink)
+            case.Start:
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .frame(maxWidth: .infinity)
+            case.Empty:
+                EmptyView()
+                //                case .error(let message):
+                //                    Text(message)
+                //                        .foregroundColor(.pink)
             }
         }
         .listStyle(.plain)

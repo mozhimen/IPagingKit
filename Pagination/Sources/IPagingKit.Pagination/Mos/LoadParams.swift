@@ -30,22 +30,26 @@ open class LoadParams<KEY> {
             Append(key: key, loadSize: loadSize, placeholdersEnabled: placeHoldersEnabled)
         }
     }
-}
+    
+    //================================================================>
+    
+    public class Refresh<K> :LoadParams<K>{
+        public override init(key: K?, loadSize: Int, placeholdersEnabled: Bool) {
+            super.init(key: key, loadSize: loadSize, placeholdersEnabled: placeholdersEnabled)
+        }
+    }
 
-public class Refresh<KEY> :LoadParams<KEY>{
-    public override init(key: KEY?, loadSize: Int, placeholdersEnabled: Bool) {
-        super.init(key: key, loadSize: loadSize, placeholdersEnabled: placeholdersEnabled)
+    public class Append<K>:LoadParams<K>{
+        public override init(key: K?, loadSize: Int, placeholdersEnabled: Bool) {
+            super.init(key: key, loadSize: loadSize, placeholdersEnabled: placeholdersEnabled)
+        }
+    }
+
+    public class Prepend<K>:LoadParams<K>{
+        public override init(key: K?, loadSize: Int, placeholdersEnabled: Bool) {
+            super.init(key: key, loadSize: loadSize, placeholdersEnabled: placeholdersEnabled)
+        }
     }
 }
 
-public class Append<KEY>:LoadParams<KEY>{
-    public override init(key: KEY?, loadSize: Int, placeholdersEnabled: Bool) {
-        super.init(key: key, loadSize: loadSize, placeholdersEnabled: placeholdersEnabled)
-    }
-}
 
-public class Prepend<KEY>:LoadParams<KEY>{
-    public override init(key: KEY?, loadSize: Int, placeholdersEnabled: Bool) {
-        super.init(key: key, loadSize: loadSize, placeholdersEnabled: placeholdersEnabled)
-    }
-}
