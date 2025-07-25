@@ -5,9 +5,10 @@
 //  Created by Taiyou on 2025/7/23.
 //
 
-open class BasePagingKPagingSource<RES,DES>: PagingSource<Int,DES>,
+open class BasePagingKPagingSource<RES:Sendable,DES:Sendable>: PagingSource<Int,DES>,
                                              PPagingKDataSource,
-                                             PPagingKStateSource
+                                             PPagingKStateSource,
+                                             @unchecked Sendable
 {
     public typealias RES = RES
     public typealias DES = DES

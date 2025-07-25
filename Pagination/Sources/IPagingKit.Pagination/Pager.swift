@@ -8,10 +8,14 @@ import SwiftUI
 import Foundation
 import Combine
 
-open class Pager<KEY,VALUE>{
+@MainActor
+open class Pager<KEY,VALUE>:ObservableObject {
+    
     let pagingConfig: PagingConfig
     let pagingSource: PagingSource<KEY,VALUE>
     let initialKey: KEY?
+    let InCompleteLoadState: LoadState
+    let InitialLoadStates: LoadStates
     
     //=====================================================>
     
@@ -23,35 +27,59 @@ open class Pager<KEY,VALUE>{
         self.initialKey = initialKey
         self.pagingConfig = pagingConfig
         self.pagingSource = pagingSource
-        initial(key: initialKey, pagingConfig: pagingConfig)
+        self.InCompleteLoadState = LoadState.NotLoading(endOfPaginationReached: false)
+        self.InitialLoadStates = LoadStates(refresh: LoadState.Loading(), prepend: InCompleteLoadState, append: InCompleteLoadState)
+        self.loadState = CombineLoadStates(refresh: InitialLoadStates.refresh, prepend: InitialLoadStates.prepend, append: InitialLoadStates.append, source: InitialLoadStates)
     }
     
     //=====================================================>
     
-    @Published public var itemSnapshotList: [VALUE] = []
-    @Published public var pagingIndex :Int = 0
-    @Published public var loadState: 
+    @Published public private(set) var itemSnapshotList: [VALUE] = []
+    @Published public private(set) var pagingIndex :Int = 0
+    @Published public private(set) var loadState: CombineLoadStates
     
     //=====================================================>
     
-    func initial(
-        key:KEY?,
-        pagingConfig:PagingConfig
+    public func refresh(
+        key:KEY?
     ){
-        let params = loadParams(loadType: .Refresh, key: key)
-        Task(operation: {
-            let loadResult: LoadResult<KEY,VALUE> = try await pagingSource.load(params: params)
-            itemSnapshotList = loadResult
-        })
+        Task {
+            let params = loadParams(loadType: .Refresh, key: key)
+            let loadResult: LoadResult<KEY,VALUE> = await pagingSource.load(params: params)
+            presentPagingEvent(loadParams: params, loadResult: loadResult)
+        }
     }
     
-    public func add() {
-        Task(operation: {
-            let loadResult: LoadResult<KEY,VALUE> = pagingSource.load(params: LoadParams.create(loadType: LoadType.Append, key: KEY, loadSize: pagingConfig.pageSize, placeHoldersEnabled: pagingConfig.enablePlaceholders))
-        })
+    public func append(
+        nextKey:KEY
+    ) {
+        Task {
+            let params = loadParams(loadType: .Append, key: nextKey)
+            let loadResult: LoadResult<KEY,VALUE> = await pagingSource.load(params: params)
+            presentPagingEvent(loadParams: params, loadResult: loadResult)
+        }
     }
     
     //=====================================================>
+    
+    private func presentPagingEvent(loadParams:LoadParams<KEY>,loadResult:LoadResult<KEY,VALUE>){
+        switch loadParams {
+        case is LoadParams<KEY>.Refresh<KEY>:
+            if let page = loadResult as? LoadResult<KEY,VALUE>.Page {
+                itemSnapshotList = page.data
+                pagingIndex = pagingConfig.pageIndexFirst
+                print("Refresh page: \(pagingIndex) data: \(itemSnapshotList.count)")
+            }
+        case is LoadParams<KEY>.Append<KEY>:
+            if let page = loadResult as? LoadResult<KEY,VALUE>.Page {
+                itemSnapshotList.append(contentsOf: page.data)
+                pagingIndex += 1
+                print("Append page: \(pagingIndex) data: \(itemSnapshotList.count)")
+            }
+        default:
+            print("other")
+        }
+    }
     
     private func loadParams(loadType:LoadType,key:KEY?) -> LoadParams<KEY> {
         let pageSize = if loadType == .Refresh { pagingConfig.initialLoadSize } else { pagingConfig.pageSize }

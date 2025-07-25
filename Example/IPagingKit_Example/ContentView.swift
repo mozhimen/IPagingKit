@@ -7,32 +7,41 @@
 
 import SwiftUI
 import UIKit
+import IPagingKit_Pagination
 
 struct ContentView: View {
     
     @StateObject var viewModel = ContentViewModel()
     
     var body: some View{
-        List {
-            ForEach(viewModel.albums) { album in
-                Text(album.collectionName)
-            }
-            Color.clear.onAppear(perform: {
-                viewModel.pager.add()
-            })
-            switch viewModel.loadState {
-            case.Start:
+        VStack(content: {
+            if viewModel.pageState == PageState.LoadFirstEmpty {
+                EmptyView()
+                    .frame(maxWidth: .infinity,maxHeight:.infinity)
+                    .background(Color.red)
+            } else if viewModel.pageState == PageState.LoadFirstStart {
                 ProgressView()
                     .progressViewStyle(.circular)
                     .frame(maxWidth: .infinity)
-            case.Empty:
-                EmptyView()
-                //                case .error(let message):
-                //                    Text(message)
-                //                        .foregroundColor(.pink)
+                    .background(Color.red)
+            } else if viewModel.pageState == PageState.LoadFirstFinish {
+                List {
+                    ForEach(viewModel.pager.itemSnapshotList) { list in
+                        Text(list.collectionName)
+                            .debugBorder()
+                            .background(Color.black)
+//                        switch let state = viewModel.pager.loadState.append
+                    }
+                    Color.clear.onAppear(perform: {
+                        viewModel.pager.append(nextKey: viewModel.pager.pagingIndex+1)
+                    })
+                }
+                .background(Color.black)
             }
-        }
-        .listStyle(.plain)
+        })
+        .onAppear(perform: {
+            viewModel.pager.refresh(key: 0)
+        })
     }
 }
 

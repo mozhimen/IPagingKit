@@ -8,17 +8,18 @@ import SwiftUI
 import Combine
 import SUtilKit_SwiftUI
 
-open class BasePagingKViewModel<RES,DES> : BaseViewModel, PPagingKStateSource {
+@MainActor
+open class BasePagingKViewModel<RES:Sendable,DES:Sendable> : BaseViewModel, PPagingKStateSource, PPagingKDataSource {
+
     
-    public typealias RES = RES
-    public typealias DES = DES
-    
+
+
     //==========================================================>
     
     @Published public var pageState: PageState? = nil
     open lazy var pager: Pager<Int,DES> = getPager()
     open var pagingConfig :PagingConfig = PagingConfig()
-    open var dataSource: (any PPagingKDataSource<RES,DES>)? = nil
+
     
     //==========================================================>
     
@@ -41,7 +42,7 @@ open class BasePagingKViewModel<RES,DES> : BaseViewModel, PPagingKStateSource {
         return InnerPagingKPagingSource(
             pagingConfig: pagingConfig,
             stateSource: self,
-            dataSource: dataSource
+            dataSource: self
         )
     }
     
@@ -53,10 +54,11 @@ open class BasePagingKViewModel<RES,DES> : BaseViewModel, PPagingKStateSource {
         if currentPageIndex == pagingConfig.pageIndexFirst {
             if _isLoadStartFirst {
                 _isLoadStartFirst = false
-                print("onLoadStart:")
-                pageState = PageState.StartFirst
+                print("onLoadStart: LoadFirstStartFirst currentPageIndex \(currentPageIndex)")
+                pageState = PageState.LoadFirstStartFirst
             }
-            pageState = PageState.Start
+            print("onLoadStart: LoadFirstStart currentPageIndex \(currentPageIndex)")
+            pageState = PageState.LoadFirstStart
         }
     }
     
@@ -69,18 +71,34 @@ open class BasePagingKViewModel<RES,DES> : BaseViewModel, PPagingKStateSource {
     open func onLoadFinished(currentPageIndex: Int, isResEmpty: Bool) async throws {
         if currentPageIndex==pagingConfig.pageIndexFirst {
             if isResEmpty {
-                print("onLoadFinish: isEmpty \(isResEmpty)")
-                pageState = PageState.Empty
+                print("onLoadFinish: LoadFirstEmpty currentPageIndex \(currentPageIndex) isEmpty \(isResEmpty)")
+                pageState = PageState.LoadFirstEmpty
             }
             else{
-                pageState = PageState.Finish
+                print("onLoadFinish: LoadFirstFinish currentPageIndex \(currentPageIndex) isEmpty \(isResEmpty)")
+                pageState = PageState.LoadFirstFinish
             }
         }
     }
     
+    open func onCombineData(currentPageIndex: Int?, datas: [DES]) async throws {
+    }
+    
+    open func onTransformData(currentPageIndex: Int?, datas: [RES]) async throws -> [DES] {
+        fatalError()
+    }
+    
+    open func onGetHeader() async throws -> [DES]? {
+        return nil
+    }
+    
+    open func onGetFooter() async throws -> [DES]? {
+        return nil
+    }
+    
     //=============================================================>
     
-    class InnerPagingKPagingSource:BasePagingKPagingSource<RES,DES>{
+    class InnerPagingKPagingSource:BasePagingKPagingSource<RES,DES>,@unchecked Sendable{
         weak var stateSource: (any PPagingKStateSource<RES,DES>)?
         weak var dataSource: (any PPagingKDataSource<RES,DES>)?
         

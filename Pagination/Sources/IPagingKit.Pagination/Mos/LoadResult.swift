@@ -5,8 +5,8 @@
 //  Created by Taiyou on 2025/7/23.
 //
 
-open class LoadResult<KEY,VALUE>{
-    public class Wrong<K,V> : LoadResult<K,V>{
+open class LoadResult<KEY,VALUE>:@unchecked Sendable {
+    public class Wrong<K,V> : LoadResult<K,V>,@unchecked Sendable{
         public let error: Error
         
         init(error: Error) {
@@ -14,11 +14,11 @@ open class LoadResult<KEY,VALUE>{
         }
     }
 
-    public class Invalid<K,V>: LoadResult<K,V>{
+    public class Invalid<K,V>: LoadResult<K,V>,@unchecked Sendable{
         
     }
 
-    public class Page<K,V>:LoadResult<K,V>{
+    public class Page<K,V>:LoadResult<K,V>,@unchecked Sendable{
         public let data:[V]
         public let preKey:K?
         public let nextKey:K?

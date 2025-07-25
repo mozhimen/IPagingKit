@@ -6,8 +6,8 @@
 //
 
 public enum PageState: Equatable {
-    case Start
-    case StartFirst
-    case Finish
-    case Empty
+    case LoadFirstStart
+    case LoadFirstStartFirst
+    case LoadFirstFinish
+    case LoadFirstEmpty
 }

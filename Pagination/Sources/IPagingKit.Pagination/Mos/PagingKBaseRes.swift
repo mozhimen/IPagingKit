@@ -5,7 +5,7 @@
 //  Created by Taiyou on 2025/7/22.
 //
 
-public struct PagingKBaseRes<RES>:CustomStringConvertible {
+public struct PagingKBaseRes<RES:Sendable>:CustomStringConvertible, Sendable {
     var code: Int = 0
     var msg: String? = nil
     var data: PagingKDataRes<RES>? = nil

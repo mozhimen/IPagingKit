@@ -5,7 +5,7 @@
 //  Created by Taiyou on 2025/7/23.
 //
 
-open class LoadParams<KEY> {
+open class LoadParams<KEY>:@unchecked Sendable {
     public let key: KEY?
     public let loadSize: Int
     public let placeholdersEnabled:Bool
@@ -33,19 +33,19 @@ open class LoadParams<KEY> {
     
     //================================================================>
     
-    public class Refresh<K> :LoadParams<K>{
+    public class Refresh<K> :LoadParams<K>,@unchecked Sendable{
         public override init(key: K?, loadSize: Int, placeholdersEnabled: Bool) {
             super.init(key: key, loadSize: loadSize, placeholdersEnabled: placeholdersEnabled)
         }
     }
 
-    public class Append<K>:LoadParams<K>{
+    public class Append<K>:LoadParams<K>,@unchecked Sendable{
         public override init(key: K?, loadSize: Int, placeholdersEnabled: Bool) {
             super.init(key: key, loadSize: loadSize, placeholdersEnabled: placeholdersEnabled)
         }
     }
 
-    public class Prepend<K>:LoadParams<K>{
+    public class Prepend<K>:LoadParams<K>,@unchecked Sendable{
         public override init(key: K?, loadSize: Int, placeholdersEnabled: Bool) {
             super.init(key: key, loadSize: loadSize, placeholdersEnabled: placeholdersEnabled)
         }

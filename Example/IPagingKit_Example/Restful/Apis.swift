@@ -7,12 +7,13 @@
 import INetKit_Retrofit
 final class Apis:Scope<Retroft>{
     struct SearchRequest{
-        @Path("searchText") var searchText:String = ""
-        @Path("limit") var limit:Int = 0
-        @Path("offset") var offset:Int = 0
+        @Query("term") var term:String = ""
+        @Query("entity") var entity:String = "album"
+        @Query("limit") var limit:Int = 0
+        @Query("offset") var offset:Int = 0
     }
     
-    @GET("/search?term={searchText}&entity=album&limit={limit}&offset={offset}")
+    @GET("/search")//?term={searchText}&entity=album&limit={limit}&offset={offset}
     var search: (SearchRequest)  async throws -> SearchRes?
 }
 

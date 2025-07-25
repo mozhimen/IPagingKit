@@ -6,8 +6,8 @@
 //
 
 public protocol PPagingKStateSource<RES,DES>:AnyObject{
-    associatedtype RES
-    associatedtype DES
+    associatedtype RES:Sendable
+    associatedtype DES:Sendable
     func onLoadStart(currentPageIndex:Int) async throws
     func onLoading(currentPageIndex:Int,pageSize:Int) async throws -> PagingKBaseRes<RES>
     func onLoadFinished(currentPageIndex:Int,isResEmpty:Bool) async throws
