@@ -12,7 +12,7 @@ import IPagingKit_Pagination
 struct ContentView: View {
     
     @StateObject var viewModel = ContentViewModel()
-    
+
     var body: some View{
         VStack(content: {
             if viewModel.pageState == PageState.LoadFirstEmpty {
@@ -26,16 +26,16 @@ struct ContentView: View {
                     .background(Color.red)
             } else if viewModel.pageState == PageState.LoadFirstFinish {
                 List {
-                    ForEach(viewModel.pager.itemSnapshotList) { list in
+                    ForEach(viewModel.albums) { list in
                         Text(list.collectionName)
                             .debugBorder()
-                            .background(Color.black)
 //                        switch let state = viewModel.pager.loadState.append
                     }
-                    Color.clear.onAppear(perform: {
+                    Color.black.onAppear(perform: {
                         viewModel.pager.append(nextKey: viewModel.pager.pagingIndex+1)
                     })
                 }
+                .listStyle(.plain)
                 .background(Color.black)
             }
         })
@@ -46,5 +46,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(viewModel: ContentViewModel())
 }

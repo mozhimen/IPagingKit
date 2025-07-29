@@ -31,6 +31,7 @@ class ContentViewModel:BasePagingKViewModel<Album,Album> {
     @Published var searchText: String = "rammstein"
     
     private let _api = Apis(retrofit: Retroft.Builder().setStrScheme("https").setStrHost("itunes.apple.com").build())
+    @Published var albums: [Album] = []
     
     //=================================================================>
     
@@ -46,6 +47,13 @@ class ContentViewModel:BasePagingKViewModel<Album,Album> {
             .sink { [weak self] term in
                 self?.pager.refresh(key: pagingConfig.pageIndexFirst)
             }.store(in: &viewModelScope)
+        
+        self.pager.$itemSnapshotList
+            .sink(receiveValue: { list in
+                print("items count \(list.count)")
+                self.albums = list
+            })
+            .store(in: &viewModelScope)
     }
     
     //=================================================================>

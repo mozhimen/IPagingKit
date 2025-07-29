@@ -68,13 +68,13 @@ open class Pager<KEY,VALUE>:ObservableObject {
             if let page = loadResult as? LoadResult<KEY,VALUE>.Page {
                 itemSnapshotList = page.data
                 pagingIndex = pagingConfig.pageIndexFirst
-                print("Refresh page: \(pagingIndex) data: \(itemSnapshotList.count)")
+                print("Refresh page: \(pagingIndex) data: \(itemSnapshotList.count) last: \(itemSnapshotList.last)")
             }
         case is LoadParams<KEY>.Append<KEY>:
             if let page = loadResult as? LoadResult<KEY,VALUE>.Page {
                 itemSnapshotList.append(contentsOf: page.data)
                 pagingIndex += 1
-                print("Append page: \(pagingIndex) data: \(itemSnapshotList.count)")
+                print("Append page: \(pagingIndex) data: \(itemSnapshotList.count) last: \(itemSnapshotList.last)")
             }
         default:
             print("other")
