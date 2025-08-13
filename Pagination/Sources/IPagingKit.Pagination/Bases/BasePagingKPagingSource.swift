@@ -41,7 +41,7 @@ open class BasePagingKPagingSource<RES:Sendable,DES:Sendable>: PagingSource<Int,
     }
     
     public func onLoadStart(currentPageIndex: Int) async throws {
-        
+        print("onLoadStart currentPageIndex \(currentPageIndex)")
     }
     
     public func onLoading(currentPageIndex: Int, pageSize: Int) async throws -> PagingKBaseRes<RES> {
@@ -49,7 +49,7 @@ open class BasePagingKPagingSource<RES:Sendable,DES:Sendable>: PagingSource<Int,
     }
     
     public func onLoadFinished(currentPageIndex: Int, isResEmpty: Bool) async throws {
-        
+        print("onLoadFinished currentPageIndex \(currentPageIndex) isResEmpty \(isResEmpty)")
     }
     
     override func load(params: LoadParams<Int>) async -> LoadResult<Int, DES> {

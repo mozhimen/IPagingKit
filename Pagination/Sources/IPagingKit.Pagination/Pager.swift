@@ -53,6 +53,9 @@ open class Pager<KEY,VALUE>:ObservableObject {
     public func append(
         nextKey:KEY
     ) {
+        if itemSnapshotList.count % pagingConfig.pageSize != 0 {
+            return
+        }
         Task {
             let params = loadParams(loadType: .Append, key: nextKey)
             let loadResult: LoadResult<KEY,VALUE> = await pagingSource.load(params: params)

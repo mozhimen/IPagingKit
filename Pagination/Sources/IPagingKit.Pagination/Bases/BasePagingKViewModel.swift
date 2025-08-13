@@ -51,6 +51,7 @@ open class BasePagingKViewModel<RES:Sendable,DES:Sendable> : BaseViewModel, PPag
     private var _isLoadStartFirst = true
     
     open func onLoadStart(currentPageIndex: Int) async throws {
+        print("onLoadStart: LoadFirstStartFirst currentPageIndex \(currentPageIndex)")
         if currentPageIndex == pagingConfig.pageIndexFirst {
             if _isLoadStartFirst {
                 _isLoadStartFirst = false
@@ -69,7 +70,8 @@ open class BasePagingKViewModel<RES:Sendable,DES:Sendable> : BaseViewModel, PPag
     
     
     open func onLoadFinished(currentPageIndex: Int, isResEmpty: Bool) async throws {
-        if currentPageIndex==pagingConfig.pageIndexFirst {
+        print("onLoadFinish: LoadFirstEmpty currentPageIndex \(currentPageIndex) isEmpty \(isResEmpty)")
+        if currentPageIndex == pagingConfig.pageIndexFirst {
             if isResEmpty {
                 print("onLoadFinish: LoadFirstEmpty currentPageIndex \(currentPageIndex) isEmpty \(isResEmpty)")
                 pageState = PageState.LoadFirstEmpty
