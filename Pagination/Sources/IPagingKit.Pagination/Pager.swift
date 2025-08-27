@@ -8,8 +8,7 @@ import SwiftUI
 import Foundation
 import Combine
 
-@MainActor
-open class Pager<KEY,VALUE>:ObservableObject {
+open class Pager<KEY,VALUE>:ObservableObject,@unchecked Sendable {
     
     let pagingConfig: PagingConfig
     let pagingSource: PagingSource<KEY,VALUE>
@@ -40,6 +39,7 @@ open class Pager<KEY,VALUE>:ObservableObject {
     
     //=====================================================>
     
+    @MainActor
     public func refresh(
         key:KEY?
     ){
@@ -50,6 +50,7 @@ open class Pager<KEY,VALUE>:ObservableObject {
         }
     }
     
+    @MainActor
     public func append(
         nextKey:KEY
     ) {
