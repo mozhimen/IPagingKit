@@ -7,19 +7,20 @@
 import SwiftUI
 import Combine
 import SUtilKit_SwiftUI
+import ITaskKit_ThreadSafe
 
-@MainActor
 open class BasePagingKViewModel<RES:Sendable,DES:Sendable> : BaseViewModel, PPagingKStateSource, PPagingKDataSource {
 
     //==========================================================>
     
-    @Published public var pageState: PageState? = nil
+    @ThreadSafePublished public var pageState: PageState? = nil
     open lazy var pager: Pager<Int,DES> = getPager()
     open var pagingConfig :PagingConfig = PagingConfig()
 
     
     //==========================================================>
     
+    @MainActor
     public init(pagingConfig: PagingConfig) {
         self.pagingConfig = pagingConfig
         super.init()
